@@ -1,10 +1,14 @@
 {
     "name": "Perl Development",
+    "postStartCommand": "cp .devcontainer/bash_git_prompt.sh ~/.bash_git_prompt && echo 'source ~/.bash_git_prompt' >> ~/.bashrc",
     "build": {
         "dockerfile": "Dockerfile"
     },
     "features": {
-        "ghcr.io/devcontainers/features/git:1": {},
+        "ghcr.io/devcontainers/features/git:1": {
+            "configureGitBash": true,
+            "gitBashPrompt": true
+        },
         "ghcr.io/devcontainers/features/github-cli:1": {}
     },
     "customizations": {
