@@ -1,0 +1,8 @@
+{
+    "perl-toolbox.lint.useProfile": true,
+    "perl-toolbox.lint.severity": "stern",
+    "[perl]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "d9705996.perl-toolbox"
+    }
+}
