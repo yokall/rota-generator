@@ -14,7 +14,8 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "d9705996.perl-toolbox"
+                "d9705996.perl-toolbox",
+                "sfodje.perltidy"
             ]
         }
     }

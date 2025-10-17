@@ -1,8 +1,13 @@
 {
-    "perl-toolbox.lint.useProfile": true,
     "perl-toolbox.lint.severity": "stern",
+    "perl-toolbox.lint.useProfile": true,
+    "perl-toolbox.lint.perlcriticProfile": "/workspaces/rota-generator/.perlcriticrc",
+    "perl-toolbox.syntax.includePaths": [
+        "/workspaces/rota-generator/lib"
+    ],
+    "perltidy.profile": "/workspaces/rota-generator/.perltidyrc",
     "[perl]": {
         "editor.formatOnSave": true,
-        "editor.defaultFormatter": "d9705996.perl-toolbox"
+        "editor.defaultFormatter": "sfodje.perltidy"
     }
 }
