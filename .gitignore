@@ -25,3 +25,6 @@ nytprof.out
 # OS specific
 .DS_Store
 Thumbs.db
+
+# Configuration files with sensitive data
+config.yml
