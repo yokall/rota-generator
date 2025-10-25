@@ -8,6 +8,7 @@ use Email::Sender::Simple qw(sendmail);
 use Email::Sender::Transport::SMTP;
 use YAML::XS qw(LoadFile);
 use Try::Tiny;
+use URI::Escape;
 
 my $DEBUG = 0;
 
@@ -56,16 +57,22 @@ sub _load_config {
 sub _create_html_content {
     my ( $self, $assignments ) = @_;
 
+    my $whatsapp_content = "Recording Rota:\n";
+    my $table_rows;
+    foreach my $assignment ( @{$assignments} ) {
+        $whatsapp_content .= sprintf( "%s - %s\n",                         $assignment->{date}->dmy('/'), $assignment->{name} );
+        $table_rows       .= sprintf( "<tr><td>%s</td><td>%s</td></tr>\n", $assignment->{date}->dmy('/'), $assignment->{name} );
+    }
+
+    $whatsapp_content = uri_escape($whatsapp_content);
+
     my $html = "<html><body>\n";
     $html .= "<h1>Rota Schedule</h1>\n";
     $html .= "<table border='1'>\n";
     $html .= "<tr><th>Date</th><th></th></tr>\n";
+    $html .= $table_rows;
+    $html .= '</table><p><a href="https://wa.me/' . '?text=' . $whatsapp_content . '">Send Rota</a></p></body></html>';
 
-    for my $assignment (@$assignments) {
-        $html .= sprintf( "<tr><td>%s</td><td>%s</td></tr>\n", $assignment->{date}->strftime('%A, %d %B %Y'), $assignment->{name} );
-    }
-
-    $html .= "</table></body></html>";
     return $html;
 }
 

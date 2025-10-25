@@ -36,4 +36,5 @@ RUN apt-get update && apt-get install -y  \
     libyaml-perl \
     libauthen-sasl-perl \
     libnet-ssleay-perl \
-    libio-socket-ssl-perl
+    libio-socket-ssl-perl \
+    liburi-perl
