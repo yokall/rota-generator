@@ -77,11 +77,34 @@ sub generate_rota {
 
     my $sundays = $self->get_upcoming_sundays($start_date);
 
+    if ( my $existing_rota = read_rota() ) {
+        $self->{_current_index} = _get_overlapping_name_index( $self, $sundays, $existing_rota );
+    }
+
     my $rota = [ map { { date => $_, name => $self->_next_name(), } } @$sundays ];
 
     persist_rota($rota);
 
     return $rota;
+}
+
+sub _get_overlapping_name_index {
+    my ( $self, $sundays, $existing_rota ) = @_;
+
+    my $first_sunday = $sundays->[0];
+    for my $assignment (@$existing_rota) {
+        if ( $assignment->{date} eq $first_sunday ) {
+
+            # Find the index of the name in the names list
+            for my $i ( 0 .. $#{ $self->{names} } ) {
+                if ( $self->{names}->[$i] eq $assignment->{name} ) {
+                    return $i;
+                }
+            }
+        }
+    }
+
+    return 0;
 }
 
 sub _get_rota_filepath {
@@ -106,6 +129,28 @@ sub persist_rota {
     close $fh;
 
     return;
+}
+
+sub read_rota {
+    my $file_path = _get_rota_filepath();
+
+    # if an existing rota file does not exist, return false
+    unless ( -e $file_path ) {
+        return 0;
+    }
+
+    open my $fh, '<', $file_path or die "Could not open file '$file_path': $!";
+    my @assignments;
+    while ( my $line = <$fh> ) {
+        chomp $line;
+        my ( $date_str, $name ) = split /:/, $line;
+        my ( $year, $month, $day ) = split /-/, $date_str;
+        my $date = DateTime->new( year => $year, month => $month, day => $day );
+        push @assignments, { date => $date, name => $name };
+    }
+    close $fh;
+
+    return \@assignments;
 }
 
 1;

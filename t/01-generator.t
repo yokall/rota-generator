@@ -77,4 +77,38 @@ subtest 'Name Assignment' => sub {
     }
 };
 
+subtest 'Follow previous rota' => sub {
+    my $names = [ 'Alice', 'Bob', 'Charlie' ];
+
+    # First generate and persist a rota
+    my $generator = Rota::Generator->new( names => $names );
+
+    my $start_date = DateTime->new(
+        year  => 2025,
+        month => 10,
+        day   => 16,
+    );
+
+    my $first_assignments = $generator->generate_rota($start_date);
+
+    # Now generate an overlapping rota which should preserve the overlapping assignments
+    my $new_generator = Rota::Generator->new( names => $names );
+
+    $start_date = DateTime->new(
+        year  => 2025,
+        month => 12,
+        day   => 5,
+    );
+
+    my $new_assignments = $new_generator->generate_rota($start_date);
+
+    subtest 'New rota continues from last assignment' => sub {
+        my $new_first_assignment         = $new_assignments->[0];
+        my $first_overlapping_assignment = $first_assignments->[7];
+
+        is( $new_first_assignment->{date}->ymd, $first_overlapping_assignment->{date}->ymd, 'First overlapping assignment date matches' );
+        is( $new_first_assignment->{name},      $first_overlapping_assignment->{name},      'First overlapping assignment name matches' );
+    };
+};
+
 done_testing();
