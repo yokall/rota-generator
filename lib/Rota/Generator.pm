@@ -4,6 +4,10 @@ use strict;
 use warnings;
 
 use DateTime;
+use Cwd            qw(abs_path);
+use File::Basename qw(dirname);
+use File::Spec;
+use File::Path qw(make_path);
 
 sub new {
     my ( $class, %args ) = @_;
@@ -73,7 +77,35 @@ sub generate_rota {
 
     my $sundays = $self->get_upcoming_sundays($start_date);
 
-    return [ map { { date => $_, name => $self->_next_name(), } } @$sundays ];
+    my $rota = [ map { { date => $_, name => $self->_next_name(), } } @$sundays ];
+
+    persist_rota($rota);
+
+    return $rota;
+}
+
+sub _get_rota_filepath {
+    my $script_path = abs_path( $0 // '' );
+    my $script_dir  = $script_path ? dirname($script_path) : '.';
+    my $data_dir    = File::Spec->catdir( $script_dir, '..', 'data' );
+
+    make_path($data_dir) unless -d $data_dir;
+
+    return File::Spec->catfile( $data_dir, 'rota.txt' );
+}
+
+sub persist_rota {
+    my ($assignments) = @_;
+
+    my $file_path = _get_rota_filepath();
+
+    open my $fh, '>', $file_path or die "Could not open file '$file_path': $!";
+    foreach my $assignment (@$assignments) {
+        printf $fh "%s:%s\n", $assignment->{date}->ymd, $assignment->{name};
+    }
+    close $fh;
+
+    return;
 }
 
 1;

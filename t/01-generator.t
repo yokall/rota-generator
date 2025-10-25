@@ -3,6 +3,8 @@
 use Test2::V0;
 
 use DateTime;
+use File::Spec;
+use File::Basename;
 
 use Rota::Generator;
 
@@ -54,6 +56,25 @@ subtest 'Name Assignment' => sub {
     is( $assignments->[1]->{name}, 'Bob',     'Second person assigned' );
     is( $assignments->[2]->{name}, 'Charlie', 'Third person assigned' );
     is( $assignments->[3]->{name}, 'Alice',   'Rotation starts over' );
+
+    my $t_dir = dirname(__FILE__);
+    my $file  = File::Spec->catfile( $t_dir, '..', 'data', 'rota.txt' );
+
+    ok( -e $file, 'The rota schedule is persisted' );
+
+    open my $fh, '<', $file or die "Can't open $file: $!";
+    chomp( my @lines = <$fh> );
+    close $fh;
+
+    is( scalar @lines, scalar @$assignments, 'File has same number of lines as assignments' );
+
+    for my $i ( 0 .. $#lines ) {
+        my $expected_name = $assignments->[$i]{name};
+        ok( $lines[$i] =~ /\Q$expected_name\E/, "Line @{[$i+1]} contains name $expected_name" );
+
+        my $expected_date = $assignments->[$i]{date}->ymd;
+        ok( $lines[$i] =~ /\Q$expected_date\E/, "Line @{[$i+1]} contains date $expected_date" );
+    }
 };
 
 done_testing();

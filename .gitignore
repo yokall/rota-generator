@@ -28,3 +28,6 @@ Thumbs.db
 
 # Configuration files with sensitive data
 config.yml
+
+# Persisted data
+data/
