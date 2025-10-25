@@ -15,3 +15,8 @@ smtp:
   # Gmail: Google Account -> Security -> App Passwords
   # Outlook: Account Settings -> Security -> Advanced security -> App passwords
   pass: your-app-password
+
+names:
+  - ALice
+  - Bob
+  - Charlie

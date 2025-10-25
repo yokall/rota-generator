@@ -5,6 +5,7 @@ use warnings;
 
 use DateTime;
 use Try::Tiny;
+use YAML::XS qw(LoadFile);
 
 use FindBin qw($Bin);
 use lib "$Bin/../lib";
@@ -12,7 +13,16 @@ use lib "$Bin/../lib";
 use Rota::Generator;
 use Rota::Notifier;
 
-my @names = ( 'Alice', 'Bob', 'Charlie' );
+my $config_file = "$Bin/config.yml";
+my $config;
+try {
+    $config = LoadFile($config_file);
+}
+catch {
+    die "Failed to load config: $_";
+};
+
+my @names = @{ $config->{names} };
 
 my $generator = Rota::Generator->new( names => \@names );
 
