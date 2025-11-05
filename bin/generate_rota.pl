@@ -36,7 +36,7 @@ foreach my $assignment (@$assignments) {
 }
 
 try {
-    my $notifier = Rota::Notifier->new( from => 'yokall@gmail.com', to => 'colincampbell321123@hotmail.com' );
+    my $notifier = Rota::Notifier->new( from => 'yokall@gmail.com', to => 'colincampbell321123@hotmail.com', config => $config );
     $notifier->send_rota($assignments);
     print "Rota has been generated and sent successfully!\n";
 

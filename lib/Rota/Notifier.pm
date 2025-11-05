@@ -6,7 +6,6 @@ use warnings;
 use Email::MIME;
 use Email::Sender::Simple qw(sendmail);
 use Email::Sender::Transport::SMTP;
-use YAML::XS qw(LoadFile);
 use Try::Tiny;
 use URI::Escape;
 
@@ -16,10 +15,10 @@ sub new {
     my ( $class, %args ) = @_;
 
     my $self = {
-        config_file => $args{config_file} || 'config.yml',
-        from        => $args{from},
-        to          => $args{to},
-        transport   => $args{transport},                     # Optional transport for testing
+        config    => $args{config},
+        from      => $args{from},
+        to        => $args{to},
+        transport => $args{transport},    # Optional transport for testing
     };
 
     bless $self, $class;
@@ -39,13 +38,14 @@ sub _load_config {
     my ($self) = @_;
 
     try {
-        my $config = LoadFile( $self->{config_file} );
+        use Data::Dumper;
+        warn Dumper( $self->{config} );
 
         # Load SMTP settings
-        $self->{smtp} = $config->{smtp}{host} || die "SMTP host required";
-        $self->{port} = $config->{smtp}{port} || 587;
-        $self->{user} = $config->{smtp}{user} || die "SMTP user required";
-        $self->{pass} = $config->{smtp}{pass} || die "SMTP password required";
+        $self->{smtp} = $self->{config}{smtp}{host} || die "SMTP host required";
+        $self->{port} = $self->{config}{smtp}{port} || 587;
+        $self->{user} = $self->{config}{smtp}{user} || die "SMTP user required";
+        $self->{pass} = $self->{config}{smtp}{pass} || die "SMTP password required";
     }
     catch {
         die "Failed to load config: $_";
