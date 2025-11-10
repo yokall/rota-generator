@@ -5,7 +5,6 @@ use warnings;
 
 use DateTime;
 use Try::Tiny;
-use YAML::XS qw(LoadFile);
 
 use FindBin qw($Bin);
 use lib "$Bin/../lib";
@@ -13,16 +12,10 @@ use lib "$Bin/../lib";
 use Rota::Generator;
 use Rota::Notifier;
 
-my $config_file = "$Bin/config.yml";
-my $config;
-try {
-    $config = LoadFile($config_file);
+unless ( $ENV{ROTA_NAMES} ) {
+    die "Please set ROTA_NAMES environment variable with comma-separated names\n";
 }
-catch {
-    die "Failed to load config: $_";
-};
-
-my @names = @{ $config->{names} };
+my @names = split /\s*,\s*/, $ENV{ROTA_NAMES};    # Split on comma with optional whitespace
 
 my $generator = Rota::Generator->new( names => \@names );
 
@@ -36,7 +29,7 @@ foreach my $assignment (@$assignments) {
 }
 
 try {
-    my $notifier = Rota::Notifier->new( from => 'yokall@gmail.com', to => 'colincampbell321123@hotmail.com', config => $config );
+    my $notifier = Rota::Notifier->new( from => 'yokall@gmail.com', to => 'colincampbell321123@hotmail.com' );
     $notifier->send_rota($assignments);
     print "Rota has been generated and sent successfully!\n";
 

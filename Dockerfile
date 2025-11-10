@@ -16,7 +16,6 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     libemail-sender-perl \
     libemail-mime-perl \
-    libyaml-perl \
     libauthen-sasl-perl \
     libnet-ssleay-perl \
     libio-socket-ssl-perl \

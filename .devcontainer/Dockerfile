@@ -33,7 +33,6 @@ RUN apt-get update && apt-get install -y \
 RUN apt-get update && apt-get install -y  \
     libemail-sender-perl \
     libemail-mime-perl \
-    libyaml-perl \
     libauthen-sasl-perl \
     libnet-ssleay-perl \
     libio-socket-ssl-perl \

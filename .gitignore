@@ -27,7 +27,7 @@ nytprof.out
 Thumbs.db
 
 # Configuration files with sensitive data
-config.yml
+.env
 
 # Persisted data
 data/

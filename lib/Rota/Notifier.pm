@@ -15,7 +15,6 @@ sub new {
     my ( $class, %args ) = @_;
 
     my $self = {
-        config    => $args{config},
         from      => $args{from},
         to        => $args{to},
         transport => $args{transport},    # Optional transport for testing
@@ -38,14 +37,10 @@ sub _load_config {
     my ($self) = @_;
 
     try {
-        use Data::Dumper;
-        warn Dumper( $self->{config} ) if $DEBUG;
-
-        # Load SMTP settings with environment variable override for password
-        $self->{smtp} = $self->{config}{smtp}{host} || die "SMTP host required";
-        $self->{port} = $self->{config}{smtp}{port} || 587;
-        $self->{user} = $self->{config}{smtp}{user} || die "SMTP user required";
-        $self->{pass} = $ENV{SMTP_PASSWORD}         || $self->{config}{smtp}{pass} || die "SMTP password required";
+        $self->{smtp} = $ENV{SMTP_HOST}     || die "SMTP host required";
+        $self->{port} = $ENV{SMTP_PORT}     || die "SMTP port required";
+        $self->{user} = $ENV{SMTP_USER}     || die "SMTP user required";
+        $self->{pass} = $ENV{SMTP_PASSWORD} || die "SMTP password required";
     }
     catch {
         die "Failed to load config: $_";
