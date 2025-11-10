@@ -26,7 +26,7 @@ my @names = @{ $config->{names} };
 
 my $generator = Rota::Generator->new( names => \@names );
 
-my $start_date  = DateTime->now();
+my $start_date  = DateTime->today();
 my $assignments = $generator->generate_rota($start_date);
 
 print "\nRota Schedule:\n";
