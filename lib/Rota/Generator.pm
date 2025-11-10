@@ -12,8 +12,16 @@ use File::Path qw(make_path);
 sub new {
     my ( $class, %args ) = @_;
 
+    my @names;
+    if ( my $env_names = $ENV{ROTA_NAMES} ) {
+        @names = split /\s*,\s*/, $env_names;    # Split on comma with optional whitespace
+    }
+    else {
+        @names = @{ $args{names} || [] };
+    }
+
     return bless {
-        names          => $args{names} || [],
+        names          => \@names,
         _current_index => 0,
     }, $class;
 }

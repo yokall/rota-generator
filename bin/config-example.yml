@@ -14,9 +14,11 @@ smtp:
   # Generate an App Password:
   # Gmail: Google Account -> Security -> App Passwords
   # Outlook: Account Settings -> Security -> Advanced security -> App passwords
-  pass: your-app-password
+  # Password should be provided via SMTP_PASSWORD environment variable
 
 names:
-  - ALice
+  # Names can be provided via ROTA_NAMES environment variable as comma-separated list
+  # e.g., ROTA_NAMES=Alice,Bob,Charlie
+  - Alice
   - Bob
   - Charlie
