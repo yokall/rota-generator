@@ -4,24 +4,14 @@ use strict;
 use warnings;
 
 use DateTime;
-use Cwd            qw(abs_path);
-use File::Basename qw(dirname);
-use File::Spec;
-use File::Path qw(make_path);
+use Rota::Persistence;
 
 sub new {
     my ( $class, %args ) = @_;
 
-    my @names;
-    if ( my $env_names = $ENV{ROTA_NAMES} ) {
-        @names = split /\s*,\s*/, $env_names;    # Split on comma with optional whitespace
-    }
-    else {
-        @names = @{ $args{names} || [] };
-    }
-
     return bless {
-        names          => \@names,
+        names          => $args{names}       || [],
+        persistence    => $args{persistence} || Rota::Persistence->create(),
         _current_index => 0,
     }, $class;
 }
@@ -85,13 +75,13 @@ sub generate_rota {
 
     my $sundays = $self->get_upcoming_sundays($start_date);
 
-    if ( my $existing_rota = read_rota() ) {
+    if ( my $existing_rota = $self->{persistence}->read_rota() ) {
         $self->{_current_index} = _get_overlapping_name_index( $self, $sundays, $existing_rota );
     }
 
     my $rota = [ map { { date => $_, name => $self->_next_name(), } } @$sundays ];
 
-    persist_rota($rota);
+    $self->{persistence}->write_rota($rota);
 
     return $rota;
 }
@@ -113,52 +103,6 @@ sub _get_overlapping_name_index {
     }
 
     return 0;
-}
-
-sub _get_rota_filepath {
-    my $script_path = abs_path( $0 // '' );
-    my $script_dir  = $script_path ? dirname($script_path) : '.';
-    my $data_dir    = File::Spec->catdir( $script_dir, '..', 'data' );
-
-    make_path($data_dir) unless -d $data_dir;
-
-    return File::Spec->catfile( $data_dir, 'rota.txt' );
-}
-
-sub persist_rota {
-    my ($assignments) = @_;
-
-    my $file_path = _get_rota_filepath();
-
-    open my $fh, '>', $file_path or die "Could not open file '$file_path': $!";
-    foreach my $assignment (@$assignments) {
-        printf $fh "%s:%s\n", $assignment->{date}->ymd, $assignment->{name};
-    }
-    close $fh;
-
-    return;
-}
-
-sub read_rota {
-    my $file_path = _get_rota_filepath();
-
-    # if an existing rota file does not exist, return false
-    unless ( -e $file_path ) {
-        return 0;
-    }
-
-    open my $fh, '<', $file_path or die "Could not open file '$file_path': $!";
-    my @assignments;
-    while ( my $line = <$fh> ) {
-        chomp $line;
-        my ( $date_str, $name ) = split /:/, $line;
-        my ( $year, $month, $day ) = split /-/, $date_str;
-        my $date = DateTime->new( year => $year, month => $month, day => $day );
-        push @assignments, { date => $date, name => $name };
-    }
-    close $fh;
-
-    return \@assignments;
 }
 
 1;

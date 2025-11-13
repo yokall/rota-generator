@@ -5,6 +5,7 @@ use Test2::V0;
 use DateTime;
 use File::Spec;
 use File::Basename;
+use JSON::PP;
 
 use Rota::Generator;
 
@@ -58,22 +59,32 @@ subtest 'Name Assignment' => sub {
     is( $assignments->[3]->{name}, 'Alice',   'Rotation starts over' );
 
     my $t_dir = dirname(__FILE__);
-    my $file  = File::Spec->catfile( $t_dir, '..', 'data', 'rota.txt' );
+    my $file  = File::Spec->catfile( $t_dir, '..', 'data', 'rota.json' );
 
-    ok( -e $file, 'The rota schedule is persisted' );
+    if ( ok( -e $file, 'The rota schedule is persisted' ) ) {
 
-    open my $fh, '<', $file or die "Can't open $file: $!";
-    chomp( my @lines = <$fh> );
-    close $fh;
+        open my $fh, '<', $file or die "Can't open $file: $!";
+        my $json_text = do { local $/; <$fh> };
+        close $fh;
 
-    is( scalar @lines, scalar @$assignments, 'File has same number of lines as assignments' );
+        my $data = decode_json($json_text);
 
-    for my $i ( 0 .. $#lines ) {
-        my $expected_name = $assignments->[$i]{name};
-        ok( $lines[$i] =~ /\Q$expected_name\E/, "Line @{[$i+1]} contains name $expected_name" );
+        is ref($data), 'ARRAY', 'Persisted data is a array';
 
-        my $expected_date = $assignments->[$i]{date}->ymd;
-        ok( $lines[$i] =~ /\Q$expected_date\E/, "Line @{[$i+1]} contains date $expected_date" );
+        is( scalar @{$data}, scalar @$assignments, 'File has same number of entries as assignments' );
+
+        for my $i ( 0 .. $#$data ) {
+            my $entry = $data->[$i];
+
+            is ref($entry), 'HASH', "Entry $i is a hash";
+
+            ok exists $entry->{name}, "Entry $i has key 'name'";
+            ok exists $entry->{date}, "Entry $i has key 'date'";
+
+            like $entry->{name}, qr/^\w+$/, "Entry $i: name is a word";
+
+            like $entry->{date}, qr/^\d{4}-\d{2}-\d{2}$/, "Entry $i: date is in the format YYYY-MM-DD";
+        }
     }
 };
 
