@@ -11,13 +11,14 @@ use lib "$Bin/../lib";
 
 use Rota::Generator;
 use Rota::Notifier;
+use Rota::Persistence;
 
 unless ( $ENV{ROTA_NAMES} ) {
     die "Please set ROTA_NAMES environment variable with comma-separated names\n";
 }
 my @names = split /\s*,\s*/, $ENV{ROTA_NAMES};    # Split on comma with optional whitespace
 
-my $generator = Rota::Generator->new( names => \@names );
+my $generator = Rota::Generator->new( names => \@names, persistence => Rota::Persistence->create() );
 
 my $start_date  = DateTime->today();
 my $assignments = $generator->generate_rota($start_date);
