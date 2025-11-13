@@ -1,0 +1,13 @@
+data
+.devcontainer
+Dockerfile
+.dockerignore
+.env
+.git
+.github
+.gitignore
+.perlcriticrc
+.perltidyrc
+README.md
+t
+.vscode
