@@ -11,6 +11,12 @@
         },
         "ghcr.io/devcontainers/features/github-cli:1": {}
     },
+    "mounts": [
+        "source=${localEnv:HOME}/rota-runner-key.json,target=/workspaces/rota-runner-key.json,type=bind"
+    ],
+    "containerEnv": {
+        "GOOGLE_APPLICATION_CREDENTIALS": "/workspaces/rota-runner-key.json"
+    },
     "customizations": {
         "vscode": {
             "extensions": [

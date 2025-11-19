@@ -15,6 +15,11 @@ sub create {
         return Rota::Persistence::File->new( %{ $args{file_opts} || {} } );
     }
 
+    if ( $provider eq 'gcs' ) {
+        require Rota::Persistence::GCS;
+        return Rota::Persistence::GCS->new( %{ $args{gcs_opts} || {} } );
+    }
+
     die "Unknown persistence provider: $provider";
 }
 
