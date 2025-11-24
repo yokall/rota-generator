@@ -12,3 +12,32 @@
     ```
 1. Build the docker image `docker build -t rota-generator .`
 1. Run the app `docker run --env-file .env rota-generator`
+
+## GCS (Google Cloud Services) Persistence
+
+1. setup a project and storage bucket:
+    - Create a project in GCS
+    - Install gcloud cli
+    - Enable services
+        - `gcloud services enable run.googleapis.com storage.googleapis.com cloudscheduler.googleapis.com secretmanager.googleapis.com iam.googleapis.com`
+    - Create a bucket for storage
+        - `gcloud storage buckets create gs://$BUCKET_NAME --location=europe-west1`
+    - Create service accounts
+        - `gcloud iam service-accounts create rota-runner-sa --display-name="Rota Cloud Run runtime SA"`
+        - `gcloud iam service-accounts create rota-scheduler-sa --display-name="Rota Cloud Scheduler invoker SA"`
+        - `gcloud projects add-iam-policy-binding $(gcloud config get-value project) --member="serviceAccount:rota-runner-sa@$(gcloud config get-value project).iam.gserviceaccount.com" --role="roles/storage.objectAdmin"`
+    - Create a service account key for authentication
+        - `gcloud iam service-accounts keys create ~/rota-runner-key.json --iam-account=rota-runner-sa@$(gcloud config get-value project).iam.gserviceaccount.com`
+
+1. Add the following env vars to `.env`
+    ```ini
+    PERSISTENCE_PROVIDER=gcs
+    PERSISTENCE_GCS_BUCKET=$BUCKET_NAME
+    ```
+
+1. Build and run the docker container
+    ```
+    docker build -t rota-generator .
+
+    docker run --env-file .env --mount type=bind,source=/path/rota-runner-key.json,target=/secrets/rota-runner-key.json,readonly -e GOOGLE_APPLICATION_CREDENTIALS=/secrets/rota-runner-key.json rota-generator
+    ```

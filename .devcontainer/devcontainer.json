@@ -21,7 +21,9 @@
         "vscode": {
             "extensions": [
                 "d9705996.perl-toolbox",
-                "sfodje.perltidy"
+                "sfodje.perltidy",
+                "eamodio.gitlens",
+                "mhutchie.git-graph"
             ]
         }
     }

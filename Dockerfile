@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y \
     libio-socket-ssl-perl \
     liburi-perl \
     libdatetime-perl \
+    libcrypt-openssl-rsa-perl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set working directory

@@ -14,8 +14,7 @@ ENV LANG=en_GB.UTF-8 \
 RUN apt-get update && apt-get install -y \
     perl \
     build-essential \
-    git \
-    apt-transport-https ca-certificates gnupg curl
+    git
 
 # Install testing modules
 RUN apt-get update && apt-get install -y \
@@ -30,9 +29,6 @@ RUN apt-get update && apt-get install -y \
     perltidy \
     libdist-zilla-perl
 
-# Install gcloud
-RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && apt-get update -y && apt-get install google-cloud-cli -y
-
 # Install perl modules for application
 RUN apt-get update && apt-get install -y  \
     libemail-sender-perl \
@@ -40,4 +36,5 @@ RUN apt-get update && apt-get install -y  \
     libauthen-sasl-perl \
     libnet-ssleay-perl \
     libio-socket-ssl-perl \
-    liburi-perl
+    liburi-perl \
+    libcrypt-openssl-rsa-perl
