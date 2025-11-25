@@ -61,6 +61,10 @@ sub get_gcloud_token {
 sub _file_exists {
     my $path = shift;
 
+    if ( !defined $path ) {
+        return 0;
+    }
+
     return -f $path;
 }
 
