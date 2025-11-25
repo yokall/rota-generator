@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use DateTime;
+use POSIX qw(strftime);
 use Try::Tiny;
 
 use FindBin qw($Bin);
@@ -12,6 +13,12 @@ use lib "$Bin/../lib";
 use Rota::Generator;
 use Rota::Notifier;
 use Rota::Persistence;
+
+unless ( $ENV{FORCE} ) {
+    unless ( its_friday() ) {
+        die "This script should only be run on Fridays\n";
+    }
+}
 
 unless ( $ENV{ROTA_NAMES} ) {
     die "Please set ROTA_NAMES environment variable with comma-separated names\n";
@@ -38,3 +45,9 @@ try {
 catch {
     die "Failed to send rota: $_\n";
 };
+
+sub its_friday {
+    my $day_of_week = strftime( "%u", localtime );    # 1=Monday, 5=Friday
+
+    return $day_of_week == 5;
+}

@@ -4,6 +4,7 @@
 
 1. Create .env file, example:
     ```ini
+    FORCE=1
     ROTA_NAMES=Alice,Bob,Charlie
     SMTP_HOST=smtp.gmail.com
     SMTP_PORT=587
@@ -12,6 +13,10 @@
     ```
 1. Build the docker image `docker build -t rota-generator .`
 1. Run the app `docker run --env-file .env rota-generator`
+
+## FORCE Environment Variable
+
+For testing you will need to set the environment variable `FORCE` to true as the app will only run of Fridays be default.  This is for the scheduled cloud run that runs every 3rd Friday of the month by running between the 15th and 21st of the month but the app will only actually run on the Friday.
 
 ## GCS (Google Cloud Services) Persistence
 
