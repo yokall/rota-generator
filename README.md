@@ -46,3 +46,11 @@ For testing you will need to set the environment variable `FORCE` to true as the
 
     docker run --env-file .env --mount type=bind,source=/path/rota-runner-key.json,target=/secrets/rota-runner-key.json,readonly -e GOOGLE_APPLICATION_CREDENTIALS=/secrets/rota-runner-key.json rota-generator
     ```
+
+## Pushing Docker Image to Google Cloud
+
+```
+docker build -t europe-west1-docker.pkg.dev/rota-generator-477821/rota-generator-repo/rota-generator:latest .
+
+docker push europe-west1-docker.pkg.dev/rota-generator-477821/rota-generator-repo/rota-generator:latest
+```
