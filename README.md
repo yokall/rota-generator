@@ -16,7 +16,11 @@
 
 ## FORCE Environment Variable
 
-For testing you will need to set the environment variable `FORCE` to true as the app will only run of Fridays be default.  This is for the scheduled cloud run that runs every 3rd Friday of the month by running between the 15th and 21st of the month but the app will only actually run on the Friday.
+For testing you will need to set the environment variable `FORCE` to true as the app will only run of Fridays by default.  This is for the scheduled cloud run that runs every 3rd Friday of the month by running between the 15th and 21st of the month but the app will only actually run on the Friday.
+
+## MONTHS Environment Variable
+
+By default the schedule will be generated for the next 3 months but this can be overriden with the environment variable `MONTHS`
 
 ## GCS (Google Cloud Services) Persistence
 

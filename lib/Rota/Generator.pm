@@ -22,6 +22,7 @@ sub get_upcoming_sundays {
     my $date = _get_next_sunday($start_date);
 
     # Find the last Sunday of the month two months ahead
+    # The number of months may be configured via the MONTHS environment variable
     my $last_day = _get_end_date($start_date);
 
     my @sundays;
@@ -47,7 +48,7 @@ sub _get_next_sunday {
 sub _get_end_date {
     my $start_date = shift;
 
-    my $end_month = $start_date->clone->add( months => 2 );
+    my $end_month = $start_date->clone->add( months => $ENV{MONTHS} || 2 );
     my $last_day  = DateTime->last_day_of_month(
         year  => $end_month->year,
         month => $end_month->month,
