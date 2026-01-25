@@ -25,9 +25,28 @@ unless ( $ENV{ROTA_NAMES} ) {
 }
 my @names = split /\s*,\s*/, $ENV{ROTA_NAMES};    # Split on comma with optional whitespace
 
-my $generator = Rota::Generator->new( names => \@names, persistence => Rota::Persistence->create() );
+my $start_date;
+if ( $ENV{START_DATE} ) {
+    try {
+        my ( $year, $month, $day ) = split /-/, $ENV{START_DATE};
+        unless ( defined $year && defined $month && defined $day ) {
+            die "Invalid START_DATE format";
+        }
+        $start_date = DateTime->new(
+            year  => $year,
+            month => $month,
+            day   => $day,
+        );
+    }
+    catch {
+        die "Invalid START_DATE format. Please use YYYY-MM-DD format (e.g., 2025-10-16)\n";
+    };
+}
+else {
+    $start_date = DateTime->today();
+}
 
-my $start_date  = DateTime->today();
+my $generator   = Rota::Generator->new( names => \@names, persistence => Rota::Persistence->create() );
 my $assignments = $generator->generate_rota($start_date);
 
 print "\nRota Schedule:\n";
