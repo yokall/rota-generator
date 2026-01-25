@@ -55,18 +55,34 @@ sub _create_html_content {
     my $whatsapp_content = "Recording Rota:\n";
     my $table_rows;
     foreach my $assignment ( @{$assignments} ) {
+        my $day      = $assignment->{date}->day;
+        my $suffix   = $day =~ /1[123]$/ ? 'th' : $day =~ /1$/ ? 'st' : $day =~ /2$/ ? 'nd' : $day =~ /3$/ ? 'rd' : 'th';
+        my $month    = $assignment->{date}->strftime('%b');
+        my $date_str = "$month $day$suffix";
         $whatsapp_content .= sprintf( "%s - %s\n",                         $assignment->{date}->dmy('/'), $assignment->{name} );
-        $table_rows       .= sprintf( "<tr><td>%s</td><td>%s</td></tr>\n", $assignment->{date}->dmy('/'), $assignment->{name} );
+        $table_rows       .= sprintf( "<tr><td>%s</td><td>%s</td></tr>\n", $date_str,                     $assignment->{name} );
     }
 
     $whatsapp_content = uri_escape($whatsapp_content);
 
-    my $html = "<html><body>\n";
-    $html .= "<h1>Rota Schedule</h1>\n";
+    my $html = "<html><head><style>\n";
+    $html .= "body { font-family: Arial, sans-serif; margin: 40px; padding: 20px; background-color: #f5f5f5; }\n";
+    $html
+        .= "table { width: 100%; max-width: 800px; margin: 0 auto; border-collapse: collapse; background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }\n";
+    $html .= "th { font-size: 24px; font-weight: bold; padding: 20px; text-align: center; background-color: #333; color: white; border: 2px solid #333; }\n";
+    $html .= "td { font-size: 20px; padding: 15px 20px; border: 1px solid #ddd; text-align: left; }\n";
+    $html .= "tr:nth-child(even) { background-color: #f9f9f9; }\n";
+    $html .= ".no-print { display: none; }\n";
+    $html .= q{@media print { body { margin: 0; padding: 0; background-color: white; } .no-print { display: none !important; } }};
+    $html .= "\n</style></head><body>\n";
     $html .= "<table border='1'>\n";
-    $html .= "<tr><th>Date</th><th></th></tr>\n";
+    $html .= "<tr><th colspan='2'>Recording Rota</th></tr>\n";
     $html .= $table_rows;
-    $html .= '</table><p><a href="https://wa.me/' . '?text=' . $whatsapp_content . '">Send Rota</a></p></body></html>';
+    $html
+        .= '</table><p class="no-print" style="text-align: center; margin-top: 30px;"><a href="https://wa.me/'
+        . '?text='
+        . $whatsapp_content
+        . '">Send Rota</a></p></body></html>';
 
     return $html;
 }
@@ -80,7 +96,7 @@ sub send_rota {
         header_str => [
             From    => $self->{from},
             To      => $self->{to},
-            Subject => 'Rota Schedule Update',
+            Subject => 'Recording Rota Update',
         ],
         parts => [
             Email::MIME->create(
