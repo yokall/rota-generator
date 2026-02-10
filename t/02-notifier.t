@@ -37,7 +37,7 @@ subtest 'Send Rota Email' => sub {
     my $email        = $emails[0];
     my $email_string = $email->{email}->as_string;
 
-    like( $email_string, qr/^Subject: Rota Schedule/m,                     'Subject is correct' );
+    like( $email_string, qr/^Subject: Recording Rota Update/m,             'Subject is correct' );
     like( $email_string, qr/^To: me\@example.com/m,                        'To address is correct' );
     like( $email_string, qr/Content-Type: text\/html/m,                    'Contains HTML part' );
     like( $email_string, qr/Content-Transfer-Encoding: quoted-printable/m, 'Has quoted-printable encoding' );
