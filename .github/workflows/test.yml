@@ -23,11 +23,11 @@ jobs:
             libnet-ssleay-perl libio-socket-ssl-perl liburi-perl \
             libcrypt-openssl-rsa-perl
 
-      - name: Run tests
-        run: yath test t/
+      - name: Run tests with coverage
+        run: perl -MDevel::Cover=-silent,-db,cover_db yath test t/
 
       - name: Generate coverage report
-        run: cover -test -report=html_basic
+        run: cover -report=html_basic
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
