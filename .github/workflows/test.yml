@@ -9,21 +9,20 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Build and run tests in dev container
-        uses: devcontainers/ci@v0
+        uses: devcontainers/ci@v0.3
         with:
           configFile: .devcontainer/devcontainer.json
           push: never
           runCmd: |
             yath test t/
             cover -test -report=html_basic
-      
+
       - name: Upload coverage report
-        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
