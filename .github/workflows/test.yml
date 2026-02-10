@@ -13,14 +13,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build and run tests in dev container
-        uses: devcontainers/ci@v0.3
-        with:
-          configFile: .devcontainer/devcontainer.json
-          push: never
-          runCmd: |
-            yath test t/
-            cover -test -report=html_basic
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y perl build-essential \
+            libtest2-suite-perl libtest2-harness-perl libdevel-cover-perl \
+            libdevel-nytprof-perl libperl-critic-perl perltidy libdist-zilla-perl \
+            libemail-sender-perl libemail-mime-perl libauthen-sasl-perl \
+            libnet-ssleay-perl libio-socket-ssl-perl liburi-perl \
+            libcrypt-openssl-rsa-perl
+
+      - name: Run tests
+        run: yath test t/
+
+      - name: Generate coverage report
+        run: cover -test -report=html_basic
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
