@@ -10,7 +10,7 @@ help:
 test: test-coverage coverage
 
 test-coverage:
-	yath test t/ --cover=-coverage,statement,branch,condition,path,subroutine,time,-ignore,.t$
+	yath test t/ --cover=-silent,1,-coverage,statement,branch,condition,subroutine,+ignore,^t/
 
 coverage:
 	cover -report=html_basic
