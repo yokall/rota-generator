@@ -46,8 +46,15 @@ jobs:
           script: |
             const fs = require('fs');
             const coverage = fs.readFileSync('./cover_db/coverage.html', 'utf8');
-            const match = coverage.match(/Total[^<]*<\/td><td[^>]*>([^<]+)<\/td>/);
-            const total = match ? match[1].trim() : 'N/A';
+            const totalRowMatch = coverage.match(/<tr[^>]*class="Total"[^>]*>([\s\S]*?)<\/tr>/);
+            let total = 'N/A';
+            if (totalRowMatch) {
+              const content = totalRowMatch[1];
+              const numbers = content.match(/([0-9]+(?:\.[0-9]+)?)/g);
+              if (numbers && numbers.length > 0) {
+                total = numbers[numbers.length - 1] + '%';
+              }
+            }
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
