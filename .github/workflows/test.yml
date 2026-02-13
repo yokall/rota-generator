@@ -24,7 +24,7 @@ jobs:
             libcrypt-openssl-rsa-perl
 
       - name: Run tests with coverage
-        run: perl -MDevel::Cover=-silent,-db,cover_db yath test t/
+        run: yath test t/ --cover
 
       - name: Generate coverage report
         run: cover -report=html_basic
