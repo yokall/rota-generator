@@ -29,6 +29,30 @@ jobs:
       - name: Generate coverage report
         run: cover -report=html_basic
 
+      - name: Deploy coverage to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./cover_db
+
+      - name: Comment PR with coverage link
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const coverage = fs.readFileSync('./cover_db/coverage.html', 'utf8');
+            const match = coverage.match(/Total[^<]*<\/td><td[^>]*>([^<]+)<\/td>/);
+            const total = match ? match[1].trim() : 'N/A';
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `✅ Tests passed!\n\n📊 **Coverage**: ${total}\n\n[View full coverage report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`
+            });
+
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
