@@ -23,7 +23,7 @@ http://www.pjcj.net
 <h1> Branch Coverage </h1>
 <table>
 <tr>
-<th colspan="4">lib/Rota/Persistence.pm</th>
+<th colspan="4">lib/Rota/Logger.pm</th>
 </tr>
 <tr class="hblank"><td class="dblank"></td></tr>
 <tr>
@@ -36,11 +36,11 @@ http://www.pjcj.net
 
 <tr>
 <td class="h">branch</td>
-<td>2</td>
+<td>1</td>
 <td>8</td>
-<td class="c0" title="2 / 8">
+<td class="c0" title="1 / 8">
 
-<a href="lib-Rota-Persistence-pm--branch.html"> 25.0 </a>
+<a href="lib-Rota-Logger-pm--branch.html"> 12.5 </a>
 
 </td>
 </tr>
@@ -59,56 +59,56 @@ http://www.pjcj.net
 <a name=""> </a>
 <tr>
 <td class="h">
-<a href="lib-Rota-Persistence-pm.html#17">17</a>
+<a href="lib-Rota-Logger-pm.html#30">30</a>
 </td>
-
-<td class="c3"> 5 </td>
 
 <td class="c0"> 0 </td>
 
-<td class="s"> <span class="k">if</span> <span class="s">(</span><span class="i">$provider</span> <span class="k">eq</span> <span class="q">&quot;file&quot;</span><span class="s">)</span>
+<td class="c0"> 0 </td>
+
+<td class="s"> <span class="k">if</span> <span class="s">(</span><span class="i">$LOG_FORMAT</span> <span class="k">eq</span> <span class="q">&#39;json&#39;</span><span class="s">)</span> <span class="s">{</span> <span class="s">}</span>
  </td>
 </tr>
 
 <a name=""> </a>
 <tr>
 <td class="h">
-<a href="lib-Rota-Persistence-pm.html#19">19</a>
+<a href="lib-Rota-Logger-pm.html#40">40</a>
 </td>
-
-<td class="c3"> 5 </td>
 
 <td class="c0"> 0 </td>
 
-<td class="s"> <span class="k">unless</span> <span class="i">$args</span>{<span class="q">&#39;file_opts&#39;</span>}
+<td class="c0"> 0 </td>
+
+<td class="s"> <span class="i">$USE_COLOUR</span> ? <span class="co">:</span>
  </td>
 </tr>
 
 <a name=""> </a>
 <tr>
 <td class="h">
-<a href="lib-Rota-Persistence-pm.html#22">22</a>
+<a href="lib-Rota-Logger-pm.html#41">41</a>
 </td>
 
 <td class="c0"> 0 </td>
 
 <td class="c0"> 0 </td>
 
-<td class="s"> <span class="k">if</span> <span class="s">(</span><span class="i">$provider</span> <span class="k">eq</span> <span class="q">&quot;gcs&quot;</span><span class="s">)</span>
+<td class="s"> <span class="i">$USE_COLOUR</span> ? <span class="co">:</span>
  </td>
 </tr>
 
 <a name=""> </a>
 <tr>
 <td class="h">
-<a href="lib-Rota-Persistence-pm.html#24">24</a>
+<a href="lib-Rota-Logger-pm.html#58">58</a>
 </td>
 
 <td class="c0"> 0 </td>
 
-<td class="c0"> 0 </td>
+<td class="c3"> 20 </td>
 
-<td class="s"> <span class="k">unless</span> <span class="i">$args</span>{<span class="q">&#39;gcs_opts&#39;</span>}
+<td class="s"> <span class="k">if</span> <span class="i">$DEBUG</span>
  </td>
 </tr>
 
