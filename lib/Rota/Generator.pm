@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use DateTime;
+use Rota::Logger qw(log_info log_debug log_warn log_error log_fatal);
 use Rota::Persistence;
 
 sub new {
@@ -75,14 +76,17 @@ sub generate_rota {
     my ( $self, $start_date ) = @_;
 
     my $sundays = $self->get_upcoming_sundays($start_date);
+    log_debug( "Upcoming Sundays: " . join( ", ", map { $_->ymd } @$sundays ) );
 
     if ( my $existing_rota = $self->{persistence}->read_rota() ) {
+        log_debug("Existing rota found");
         $self->{_current_index} = _get_overlapping_name_index( $self, $sundays, $existing_rota );
     }
 
     my $rota = [ map { { date => $_, name => $self->_next_name(), } } @$sundays ];
 
     $self->{persistence}->write_rota($rota);
+    log_debug("Rota persisted successfully");
 
     return $rota;
 }
@@ -93,6 +97,8 @@ sub _get_overlapping_name_index {
     my $first_sunday = $sundays->[0];
     for my $assignment (@$existing_rota) {
         if ( $assignment->{date} eq $first_sunday ) {
+            log_debug( "First Sunday matches existing rota date: " . $assignment->{date}->ymd );
+            log_debug( "Name for that date: " . $assignment->{name} );
 
             # Find the index of the name in the names list
             for my $i ( 0 .. $#{ $self->{names} } ) {

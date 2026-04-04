@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y \
     libauthen-sasl-perl \
     libnet-ssleay-perl \
     libio-socket-ssl-perl \
+     libjson-xs-perl \
     liburi-perl \
     libdatetime-perl \
     libcrypt-openssl-rsa-perl \
