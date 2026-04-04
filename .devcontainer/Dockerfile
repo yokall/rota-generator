@@ -12,6 +12,7 @@ ENV LANG=en_GB.UTF-8 \
 
 # Install basic build tools and dependencies
 RUN apt-get update && apt-get install -y \
+    cpanminus  \
     perl \
     build-essential \
     git
@@ -27,7 +28,8 @@ RUN apt-get update && apt-get install -y \
     libdevel-nytprof-perl \
     libperl-critic-perl \
     perltidy \
-    libdist-zilla-perl
+    libdist-zilla-perl && \
+    cpanm --notest Test2::Tools::Process
 
 # Install perl modules for application
 RUN apt-get update && apt-get install -y  \
