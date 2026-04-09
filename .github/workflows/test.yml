@@ -24,7 +24,8 @@ jobs:
             libdevel-nytprof-perl libperl-critic-perl perltidy libdist-zilla-perl \
             libemail-sender-perl libemail-mime-perl libauthen-sasl-perl \
             libnet-ssleay-perl libio-socket-ssl-perl liburi-perl \
-            libcrypt-openssl-rsa-perl
+            libcrypt-openssl-rsa-perl cpanminus
+          sudo cpanm --notest Test2::Tools::Process
 
       - name: Run tests with coverage
         run: yath test t/ --cover=-silent,1,-coverage,statement,branch,condition,subroutine,+ignore,^t/
