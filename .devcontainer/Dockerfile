@@ -1,11 +1,11 @@
-FROM ubuntu:latest
+FROM ubuntu:24.04
 
 # Avoid prompts from apt
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Configure locale
 RUN apt-get update && apt-get install -y locales \
-    && localedef -i en_GB -c -f UTF-8 -A /usr/share/locale/locale.alias en_GB.UTF-8
+    && localedef -i en_GB -c -f UTF-8 en_GB.UTF-8
 ENV LANG=en_GB.UTF-8 \
     LANGUAGE=en_GB:en \
     LC_ALL=en_GB.UTF-8
