@@ -36,11 +36,11 @@ http://www.pjcj.net
 
 <tr>
 <td class="h">branch</td>
-<td>11</td>
+<td>13</td>
 <td>20</td>
-<td class="c0" title="11 / 20">
+<td class="c0" title="13 / 20">
 
-<a href="lib-Rota-Notifier-pm--branch.html"> 55.0 </a>
+<a href="lib-Rota-Notifier-pm--branch.html"> 65.0 </a>
 
 </td>
 </tr>
@@ -59,14 +59,14 @@ http://www.pjcj.net
 <a name=""> </a>
 <tr>
 <td class="h">
-<a href="lib-Rota-Notifier-pm.html#26">26</a>
+<a href="lib-Rota-Notifier-pm.html#19">19</a>
 </td>
 
 <td class="c0"> 0 </td>
 
 <td class="c3"> 1 </td>
 
-<td class="s"> <span class="k">unless</span> <span class="s">(</span><span class="i">$self</span>-&gt;{<span class="q">&#39;transport&#39;</span>}<span class="s">)</span>
+<td class="s"> <span class="k">ref</span> <span class="i">$to</span> <span class="k">eq</span> <span class="q">&#39;ARRAY&#39;</span> ? <span class="co">:</span>
  </td>
 </tr>
 
@@ -80,6 +80,20 @@ http://www.pjcj.net
 
 <td class="c3"> 1 </td>
 
+<td class="s"> <span class="k">unless</span> <span class="s">(</span><span class="i">$self</span>-&gt;{<span class="q">&#39;transport&#39;</span>}<span class="s">)</span>
+ </td>
+</tr>
+
+<a name=""> </a>
+<tr>
+<td class="h">
+<a href="lib-Rota-Notifier-pm.html#34">34</a>
+</td>
+
+<td class="c0"> 0 </td>
+
+<td class="c3"> 1 </td>
+
 <td class="s"> <span class="k">unless</span> <span class="i">$self</span>-&gt;{<span class="q">&#39;from&#39;</span>}
  </td>
 </tr>
@@ -87,7 +101,7 @@ http://www.pjcj.net
 <a name=""> </a>
 <tr>
 <td class="h">
-<a href="lib-Rota-Notifier-pm.html#31">31</a>
+<a href="lib-Rota-Notifier-pm.html#35">35</a>
 </td>
 
 <td class="c0"> 0 </td>
@@ -101,7 +115,7 @@ http://www.pjcj.net
 <a name=""> </a>
 <tr>
 <td class="h">
-<a href="lib-Rota-Notifier-pm.html#59">59</a>
+<a href="lib-Rota-Notifier-pm.html#63">63</a>
 </td>
 
 <td class="c3"> 1 </td>
@@ -157,27 +171,13 @@ http://www.pjcj.net
 <a name=""> </a>
 <tr>
 <td class="h">
-<a href="lib-Rota-Notifier-pm.html#114">114</a>
+<a href="lib-Rota-Notifier-pm.html#101">101</a>
 </td>
 
 <td class="c0"> 0 </td>
 
 <td class="c3"> 1 </td>
 
-<td class="s"> <span class="k">unless</span> <span class="s">(</span><span class="i">$transport</span><span class="s">)</span>
- </td>
-</tr>
-
-<a name=""> </a>
-<tr>
-<td class="h">
-<a href="lib-Rota-Notifier-pm.html#115">115</a>
-</td>
-
-<td class="c0"> 0 </td>
-
-<td class="c0"> 0 </td>
-
 <td class="s"> <span class="k">if</span> <span class="i">$DEBUG</span>
  </td>
 </tr>
@@ -185,14 +185,14 @@ http://www.pjcj.net
 <a name=""> </a>
 <tr>
 <td class="h">
-<a href="lib-Rota-Notifier-pm.html#116">116</a>
+<a href="lib-Rota-Notifier-pm.html#136">136</a>
 </td>
 
-<td class="c0"> 0 </td>
+<td class="c3"> 1 </td>
 
 <td class="c0"> 0 </td>
 
-<td class="s"> <span class="k">if</span> <span class="i">$DEBUG</span>
+<td class="s"> <span class="k">if</span> <span class="i">$self</span>-&gt;{<span class="q">&#39;transport&#39;</span>}
  </td>
 </tr>
 
