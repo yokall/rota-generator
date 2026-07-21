@@ -14,9 +14,13 @@ my $DEBUG = 0;
 sub new {
     my ( $class, %args ) = @_;
 
+    # Normalise 'to' — accept a string or arrayref
+    my $to = $args{to} // die "To address required";
+    $to = ref($to) eq 'ARRAY' ? $to : [ split /\s*,\s*/, $to ];
+
     my $self = {
         from      => $args{from},
-        to        => $args{to},
+        to        => $to,
         transport => $args{transport},    # Optional transport for testing
     };
 
@@ -90,51 +94,56 @@ sub _create_html_content {
 sub send_rota {
     my ( $self, $assignments ) = @_;
 
-    my $html = $self->_create_html_content($assignments);
+    my $html      = $self->_create_html_content($assignments);
+    my $transport = $self->_build_transport();
 
-    my $email = Email::MIME->create(
-        header_str => [
-            From    => $self->{from},
-            To      => $self->{to},
-            Subject => 'Recording Rota Update',
-        ],
-        parts => [
-            Email::MIME->create(
-                attributes => {
-                    content_type => 'text/html',
-                    encoding     => 'quoted-printable',
-                    charset      => 'UTF-8',
-                },
-                body_str => $html,
-            )
-        ],
-    );
+    for my $recipient ( @{ $self->{to} } ) {
+        print "Debug: Sending to $recipient\n" if $DEBUG;
 
-    my $transport = $self->{transport};
-    unless ($transport) {
-        print "Debug: Setting up SMTP transport for $self->{smtp}:$self->{port}\n" if $DEBUG;
-        print "Debug: Using username: $self->{user}\n"                             if $DEBUG;
+        my $email = Email::MIME->create(
+            header_str => [
+                From    => $self->{from},
+                To      => $recipient,
+                Subject => 'Recording Rota Update',
+            ],
+            parts => [
+                Email::MIME->create(
+                    attributes => {
+                        content_type => 'text/html',
+                        encoding     => 'quoted-printable',
+                        charset      => 'UTF-8',
+                    },
+                    body_str => $html,
+                )
+            ],
+        );
 
-        $transport = Email::Sender::Transport::SMTP->new(
-            {   host          => $self->{smtp},
-                port          => $self->{port},
-                ssl           => 'starttls',
-                sasl_username => $self->{user},
-                sasl_password => $self->{pass},
-                debug         => $DEBUG,
+        sendmail(
+            $email,
+            {   transport => $transport,
+                to        => $recipient,
+                from      => $self->{from},
             }
         );
     }
 
-    sendmail(
-        $email,
-        {   transport => $transport,
-            to        => $self->{to},
-            from      => $self->{from},
+    return;
+}
+
+sub _build_transport {
+    my ($self) = @_;
+
+    return $self->{transport} if $self->{transport};
+
+    return Email::Sender::Transport::SMTP->new(
+        {   host          => $self->{smtp},
+            port          => $self->{port},
+            ssl           => 'starttls',
+            sasl_username => $self->{user},
+            sasl_password => $self->{pass},
+            debug         => $DEBUG,
         }
     );
-
-    return;
 }
 
 1;

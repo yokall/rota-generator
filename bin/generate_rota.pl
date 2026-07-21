@@ -64,13 +64,19 @@ foreach my $assignment (@$assignments) {
 log_info($schedule);
 
 try {
-    my $notifier = Rota::Notifier->new( from => 'yokall@gmail.com', to => 'colincampbell321123@hotmail.com' );
+    my @recipients
+        = $ENV{EMAIL_TO}
+        ? split( /\s*,\s*/, $ENV{EMAIL_TO} )
+        : ('colincampbell321123@hotmail.com');
+
+    log_debug( "Sending rota to: " . join( ", ", @recipients ) );
+
+    my $notifier = Rota::Notifier->new( from => 'yokall@gmail.com', to => \@recipients );
     $notifier->send_rota($assignments);
     log_info("Rota has been generated and sent successfully!");
-
 }
 catch {
-    log_fatal("Failed to send rota: $_");
+    log_error("Failed to send rota: $_");
 };
 
 sub its_friday {
