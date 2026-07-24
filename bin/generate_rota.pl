@@ -71,7 +71,7 @@ try {
 
     log_debug( "Sending rota to: " . join( ", ", @recipients ) );
 
-    my $notifier = Rota::Notifier->new( from => 'yokall@gmail.com', to => \@recipients );
+    my $notifier = Rota::Notifier->new( from => 'rotagenerator@mg.campbellcasa.co.uk', to => \@recipients );
     $notifier->send_rota($assignments);
     log_info("Rota has been generated and sent successfully!");
 }
